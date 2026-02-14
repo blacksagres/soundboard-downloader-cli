@@ -42,3 +42,11 @@ export const getSoundNodes = async (searchString: string) => {
 
   return result;
 };
+
+export const getNodeDownloadPage = async (soundNodeDetailsURL: string) => {
+  const root = `https://www.myinstants.com${soundNodeDetailsURL}`;
+
+  const response = await fetch(root);
+
+  return await response.text();
+};
