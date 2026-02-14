@@ -31,21 +31,23 @@ const generateMP3Url = (originalUrl: string | null) => {
 export const getSoundNodes = async (searchString: string) => {
   const result = await getSoundNodesApi(searchString);
 
-  const document = new jsdom.JSDOM(result);
-
   const nodeList: Array<{
     label: string;
     download_url: string | null;
   }> = [];
 
-  document.window.document
-    .querySelectorAll("div.instant > a.instant-link")
-    .forEach((node) => {
-      const cleanSoundName = nodeList.push({
-        label: node.textContent,
-        download_url: generateMP3Url(node.getAttribute("href")),
+  for (const page of result) {
+    const document = new jsdom.JSDOM(page);
+
+    document.window.document
+      .querySelectorAll("div.instant > a.instant-link")
+      .forEach((node) => {
+        nodeList.push({
+          label: node.textContent,
+          download_url: generateMP3Url(node.getAttribute("href")),
+        });
       });
-    });
+  }
 
   return nodeList;
 };
