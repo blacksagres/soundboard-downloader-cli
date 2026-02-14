@@ -58,10 +58,12 @@ export const getSoundNodes = async (searchString: string) => {
 
   const allLinksResolved = await Promise.all(allDownloadLinks);
 
-  const finalList = allLabels.map((label, index) => ({
-    label,
-    download_url: allLinksResolved[index] ?? "not-found",
-  }));
+  const finalList = allLabels
+    .toSorted((a, b) => a.localeCompare(b))
+    .map((label, index) => ({
+      label,
+      download_url: allLinksResolved[index] ?? "not-found",
+    }));
 
   return finalList;
 };
