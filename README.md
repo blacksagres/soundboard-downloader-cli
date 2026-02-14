@@ -4,24 +4,27 @@ A command-line tool to download soundboard sounds from MyInstants.
 
 ## Features
 
-- Download individual soundboard sounds by ID
-- Search for sounds by name
-- Batch download multiple sounds
-- Simple and easy-to-use interface
+- Search for sounds by name using interactive prompts
+- Preview sounds by playing them in your browser
+- Download individual sounds to your local machine
+- Simple and easy-to-use interactive interface
 
 ## Installation
 
 1. Clone this repository:
+
    ```bash
    git clone https://github.com/yourusername/soundboard-downloader-cli.git
    ```
 
 2. Navigate to the project directory:
+
    ```bash
    cd soundboard-downloader-cli
    ```
 
 3. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -29,26 +32,39 @@ A command-line tool to download soundboard sounds from MyInstants.
 ## Usage
 
 ### Build the project
+
 ```bash
 npm run build
 ```
 
 ### Run the CLI
+
 ```bash
 npm start
 ```
 
-### Commands
+The CLI will guide you through an interactive process:
 
-- **Download a sound by ID**:
-  ```bash
-  npm start -- --download <sound_id>
-  ```
+1. **Search**: You'll be prompted to enter what sound effects you're looking for
+2. **Select**: Choose from the list of matching sounds
+3. **Action**: Decide whether to play the sound in your browser or download it to your `./temp/` directory
 
-- **Search for sounds**:
-  ```bash
-  npm start -- --search <query>
-  ```
+### Example Workflow
+
+```bash
+$ npm start
+
+? What sound effects are you looking for? wilhelm scream
+✔ Loading result...
+? Which one to download? (Use arrow keys)
+  > Wilhelm Scream - Original
+    Wilhelm Scream - Remastered
+    Wilhelm Scream - Short Version
+? Selected: Wilhelm Scream - Original
+? (Use arrow keys)
+  > Download
+    Play
+```
 
 ## Configuration
 
