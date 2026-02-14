@@ -14,8 +14,6 @@ export const getSoundNodes = async (searchString: string) => {
 
   const escapedSearchParam = encodeURIComponent(searchString);
 
-  console.log("Searching for: ", searchString);
-
   /**
    * Yeah so that page does a little trick to make an infinite scroll.
    *
@@ -34,13 +32,10 @@ export const getSoundNodes = async (searchString: string) => {
       const htmlResult = await response.text();
       result.push(htmlResult);
 
-      console.log(`Found ${page}, going forward.`);
       page++;
 
       continue;
     }
-
-    console.log(`No more pages, returning result.`);
 
     break;
   }
