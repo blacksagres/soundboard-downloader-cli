@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { getSoundNodes } from "./service/my-instants.service";
 import ora from "ora";
 import { input, select } from "@inquirer/prompts";
