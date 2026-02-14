@@ -1,5 +1,6 @@
 import { initLip, Lipgloss, huh } from "charsm";
 import { getSoundNodes } from "./service/my-instants.service";
+import ora from "ora";
 
 (async function () {
   const ini = await initLip();
@@ -22,12 +23,20 @@ import { getSoundNodes } from "./service/my-instants.service";
   i.load();
   const searchTerm = i.run();
 
+  const spinner = ora({
+    text: "Loading result...",
+    color: "magenta",
+    spinner: "bouncingBall",
+  }).start();
+
   const sounds = await getSoundNodes(searchTerm);
 
   const tabledata = {
     headers: ["Sound name", "Download URL"],
     rows: sounds.map((sound) => [sound.label, sound.download_url]),
   };
+
+  spinner.stop();
 
   const table = lip.newTable({
     data: tabledata,
