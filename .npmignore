@@ -1,0 +1,14 @@
+# Ignore source files - we only need the built dist/
+src/
+.ts
+.tsbuildinfo
+# Ignore node_modules
+node_modules/
+# Ignore IDE files
+.vscode/
+.idea/
+# Ignore test and config files
+tsconfig.json
+# Ignore git files
+.git
+.gitignore
