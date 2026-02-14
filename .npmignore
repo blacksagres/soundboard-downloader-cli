@@ -1,14 +1,18 @@
-# Ignore source files - we only need the built dist/
-src/
-.ts
-.tsbuildinfo
-# Ignore node_modules
+# Ignore everything except source files for npm publishing
+# When we're ready to publish, we'll build and include only dist/
+
 node_modules/
-# Ignore IDE files
+.dist
+temp/
+.nvmrc
 .vscode/
 .idea/
-# Ignore test and config files
-tsconfig.json
-# Ignore git files
-.git
-.gitignore
+.DS_Store
+*.log
+*.md
+!README.md
+!LICENSE
+
+# For now, ignore dist/ since we're source-only
+# Remove this line when ready to publish
+dist/

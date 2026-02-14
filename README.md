@@ -44,19 +44,7 @@ A command-line tool to download soundboard sounds from MyInstants. Built with Ty
    npm install
    ```
 
-### Global Installation
-
-Install globally to use the `soundboard-downloader` command anywhere:
-
-```bash
-npm install -g soundboard-downloader-cli
-```
-
-Or from the project directory:
-
-```bash
-npm link
-```
+````
 
 ## Usage
 
@@ -66,7 +54,7 @@ Run directly with ts-node (no build required):
 
 ```bash
 npm start
-```
+````
 
 ### Production Build
 
