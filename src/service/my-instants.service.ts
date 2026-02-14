@@ -1,7 +1,10 @@
-import { getSoundNodes as getSoundNodesApi } from "../api/my-instants.api";
+import {
+  getNodeDownloadPage,
+  getSoundNodes as getSoundNodesApi,
+} from "../api/my-instants.api";
 import * as jsdom from "jsdom";
 
-const generateMP3Url = (originalUrl: string | null) => {
+const getDownloadUrl = async (originalUrl: string | null) => {
   if (!originalUrl) {
     return "not-found";
   }
@@ -21,20 +24,26 @@ const generateMP3Url = (originalUrl: string | null) => {
     .replace("/en/instant/", "")
     .replace("/", "");
 
-  // MP3 download example link
-  const downloadUrlTemplate =
-    "https://www.myinstants.com/media/sounds/<WILDCARD>.mp3";
+  const downloadPage = await getNodeDownloadPage(originalUrl);
 
-  return downloadUrlTemplate.replace("<WILDCARD>", cleanSoundName);
+  const downloadLink = Array.from(
+    new jsdom.JSDOM(downloadPage).window.document.querySelectorAll("a"),
+  ).find((node: HTMLAnchorElement) => {
+    return node.href.includes(".mp3") && node.hasAttribute("download");
+  });
+
+  if (downloadLink) {
+    return `https://www.myinstants.com${downloadLink.href}`;
+  }
+
+  return "not-found";
 };
 
 export const getSoundNodes = async (searchString: string) => {
   const result = await getSoundNodesApi(searchString);
 
-  const nodeList: Array<{
-    label: string;
-    download_url: string;
-  }> = [];
+  const allLabels: Array<string> = [];
+  const allDownloadLinks: Array<Promise<string>> = [];
 
   for (const page of result) {
     const document = new jsdom.JSDOM(page);
@@ -42,12 +51,17 @@ export const getSoundNodes = async (searchString: string) => {
     document.window.document
       .querySelectorAll("div.instant > a.instant-link")
       .forEach((node) => {
-        nodeList.push({
-          label: node.textContent,
-          download_url: generateMP3Url(node.getAttribute("href")),
-        });
+        allLabels.push(node.textContent);
+        allDownloadLinks.push(getDownloadUrl(node.getAttribute("href")));
       });
   }
 
-  return nodeList;
+  const allLinksResolved = await Promise.all(allDownloadLinks);
+
+  const finalList = allLabels.map((label, index) => ({
+    label,
+    download_url: allLinksResolved[index] ?? "not-found",
+  }));
+
+  return finalList;
 };
