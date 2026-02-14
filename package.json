@@ -13,7 +13,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./src/main.ts",
     "build": "tsc",
-    "preinstall": "npm install --production=false",
     "prepare": "npm run build",
     "postinstall": "if [ -f src/main.ts ] && [ ! -d dist ]; then npm run build; fi"
   },
