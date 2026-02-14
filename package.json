@@ -1,16 +1,20 @@
 {
-  "name": "soundboard-downloader-cli",
+  "name": "@purpleproser/soundboard-downloader-cli",
   "version": "1.0.0",
   "description": "Easily download sounds from myinstants.com using this interactive CLI tool",
   "license": "MIT",
   "author": "blacksagres",
   "type": "commonjs",
-  "main": "src/main.ts",
+  "main": "dist/main.js",
+  "bin": {
+    "soundboard-downloader": "./dist/main.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./src/main.ts",
     "build": "tsc",
-    "prepare": ""
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "soundboard",
@@ -22,7 +26,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/blacksagres/soundboard-downloader-cli.git"
+    "url": "git+https://github.com/blacksagres/soundboard-downloader-cli.git"
   },
   "bugs": {
     "url": "https://github.com/blacksagres/soundboard-downloader-cli/issues"

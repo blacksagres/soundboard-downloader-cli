@@ -1,18 +1,23 @@
-# Ignore everything except source files for npm publishing
-# When we're ready to publish, we'll build and include only dist/
+# npm publish configuration
+# Include only what's needed for the published package
 
 node_modules/
-.dist
+.src
 temp/
 .nvmrc
 .vscode/
 .idea/
 .DS_Store
 *.log
-*.md
+*.ts
+*.tsx
+*.d.ts
+*.d.ts.map
+
+# Include these important files
 !README.md
 !LICENSE
+!package.json
 
-# For now, ignore dist/ since we're source-only
-# Remove this line when ready to publish
+# Include the built dist directory
 dist/

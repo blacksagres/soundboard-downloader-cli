@@ -1,6 +1,9 @@
-# Soundboard Downloader CLI
+# @purpleproser/soundboard-downloader-cli
 
-A command-line tool to download soundboard sounds from MyInstants. Built with TypeScript and Node.js.
+A command-line tool to download soundboard sounds from MyInstants.
+
+**npm Package**: `@purpleproser/soundboard-downloader-cli`
+**GitHub Repository**: [blacksagres/soundboard-downloader-cli](https://github.com/blacksagres/soundboard-downloader-cli) Built with TypeScript and Node.js.
 
 ## Features
 
@@ -44,7 +47,21 @@ A command-line tool to download soundboard sounds from MyInstants. Built with Ty
    npm install
    ```
 
-````
+### Global Installation
+
+Install globally to use the `soundboard-downloader` command anywhere:
+
+```bash
+npm install -g @purpleproser/soundboard-downloader-cli
+```
+
+Or from the project directory:
+
+```bash
+npm link
+```
+
+**Note**: This package uses the `@purpleproser` npm scope (my npm username) while the GitHub repository remains under `blacksagres`. Make sure to include the `@purpleproser/` prefix when installing!
 
 ## Usage
 
@@ -54,7 +71,7 @@ Run directly with ts-node (no build required):
 
 ```bash
 npm start
-````
+```
 
 ### Production Build
 
