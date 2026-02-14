@@ -1,8 +1,8 @@
 node_modules
 
 # build
-
-dist
+# dist folder is committed for GitHub installs
+# (excluded from npm package via .npmignore)
 
 # MISC
 
