@@ -21,7 +21,6 @@ A command-line tool to download soundboard sounds from MyInstants. Built with Ty
 ## Prerequisites
 
 - Node.js 16.x or higher
-- npm (comes with Node.js)
 
 ## Installation
 
