@@ -37,7 +37,6 @@
   "homepage": "https://github.com/blacksagres/soundboard-downloader-cli#readme",
   "devDependencies": {
     "@types/jsdom": "^27.0.0",
-    "@types/node": "^25.2.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
