@@ -64,8 +64,9 @@ import { downloadFile } from "./service/file-downloader.service";
 
     const downloadFileName = downloadUrl.split("/").pop();
 
+    // Download directly to current working directory
     downloadFile(downloadUrl, {
-      destination: `./temp/${downloadFileName}`,
+      destination: downloadFileName!,
       onStart: () => downloadSpinner.start(),
       onFinish: () => downloadSpinner.stop(),
     });
