@@ -3,7 +3,7 @@ import * as jsdom from "jsdom";
 
 const generateMP3Url = (originalUrl: string | null) => {
   if (!originalUrl) {
-    return null;
+    return "not-found";
   }
 
   /**
@@ -33,7 +33,7 @@ export const getSoundNodes = async (searchString: string) => {
 
   const nodeList: Array<{
     label: string;
-    download_url: string | null;
+    download_url: string;
   }> = [];
 
   for (const page of result) {
