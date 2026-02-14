@@ -10,6 +10,7 @@ A command-line tool to download soundboard sounds from MyInstants.
 - 🔍 Search for sounds by name using interactive prompts
 - 🎵 Preview sounds by playing them in your browser
 - ⬇️ Download individual sounds to your local machine
+- 📁 Downloads are saved directly in your current working directory
 - ✨ Simple and easy-to-use interactive interface
 
 ## Tech Stack
@@ -63,6 +64,12 @@ npm link
 
 **Note**: This package uses the `@purpleproser` npm scope (my npm username) while the GitHub repository remains under `blacksagres`. Make sure to include the `@purpleproser/` prefix when installing!
 
+**For Developers**: If you fork this project and want to publish your own version, either:
+
+1. Use a different package name, or
+2. Create your own npm scope and update the package name, or
+3. Add `"publishConfig": { "access": "public" }` to your package.json
+
 ## Usage
 
 ### Development Mode
@@ -101,7 +108,7 @@ The CLI will guide you through an interactive process:
 
 1. **Search**: You'll be prompted to enter what sound effects you're looking for
 2. **Select**: Choose from the list of matching sounds
-3. **Action**: Decide whether to play the sound in your browser or download it to your `./temp/` directory
+3. **Action**: Decide whether to play the sound in your browser or download it to your **current working directory**
 
 ### Example Workflow
 
@@ -142,7 +149,22 @@ src/
 
 ### Download Location
 
-Downloaded sounds are saved to the `./temp/` directory in the project root.
+Downloaded sounds are saved directly in your current working directory. For example:
+
+```bash
+# If you run from /home/user/projects/
+cd /home/user/projects/
+soundboard-downloader
+# Downloads will be saved to: /home/user/projects/wilhelm-scream.mp3
+```
+
+**Tip**: Create a dedicated directory for your downloads:
+
+```bash
+mkdir my-sounds && cd my-sounds
+soundboard-downloader
+# All downloads will appear in the my-sounds directory
+```
 
 ## Contributing
 
