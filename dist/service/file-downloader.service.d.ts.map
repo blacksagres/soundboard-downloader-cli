@@ -1,0 +1,1 @@
+{"version":3,"file":"file-downloader.service.d.ts","sourceRoot":"","sources":["../../src/service/file-downloader.service.ts"],"names":[],"mappings":"AAGA,eAAO,MAAM,YAAY,GACvB,KAAK,MAAM,EACX,QAAQ;IACN,WAAW,EAAE,MAAM,CAAC;IACpB,OAAO,CAAC,EAAE,MAAM,IAAI,CAAC;IACrB,QAAQ,CAAC,EAAE,MAAM,IAAI,CAAC;CACvB,SAiBF,CAAC"}
