@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Easily download sounds from myinstants.com using this interactive CLI tool",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "blacksagres",
   "type": "commonjs",
   "main": "dist/main.js",
