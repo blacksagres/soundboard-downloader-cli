@@ -6,6 +6,15 @@ import { input, select } from "@inquirer/prompts";
 import open from "open";
 import { downloadFile } from "./service/file-downloader.service";
 
+process.on("uncaughtException", (error) => {
+  if (error instanceof Error && error.name === "ExitPromptError") {
+    console.log("👋 until next time!");
+  } else {
+    // Rethrow unknown errors
+    throw error;
+  }
+});
+
 (async function () {
   const answer = await input({
     message: "What sound effects are you looking for?",
@@ -22,7 +31,10 @@ import { downloadFile } from "./service/file-downloader.service";
   spinner.stop();
 
   const selection = await select({
-    message: "Which one to download?",
+    message:
+      "Which one to download? (use the keyboard arrows to navigate, search for something directly)",
+
+    pageSize: 30,
     choices: sounds.map((sound) => ({
       name: sound.label,
       value: `${sound.label}||${sound.download_url}` as const,
