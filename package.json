@@ -16,7 +16,6 @@
     "test": "vitest",
     "start": "ts-node ./src/main.ts",
     "build": "tsc",
-    "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
