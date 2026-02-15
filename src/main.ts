@@ -18,6 +18,8 @@ process.on("uncaughtException", (error) => {
 (async function () {
   const answer = await input({
     message: "What sound effects are you looking for?",
+    required: true,
+    default: "wilhelm scream",
   });
 
   const spinner = ora({
