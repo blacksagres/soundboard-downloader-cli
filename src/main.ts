@@ -58,12 +58,20 @@ process.on("uncaughtException", (error) => {
       name: "Play",
       value: "action:play",
     },
+    {
+      name: "Show download URL (you can pipe this to other commands)",
+      value: "action:show-url",
+    },
   ] as const;
 
   const action = await select({
     message: `Selected: ${label}`,
     choices: actions,
   });
+
+  if (action === "action:show-url") {
+    console.log(downloadUrl);
+  }
 
   if (action === "action:play") {
     open(downloadUrl);
