@@ -11,7 +11,7 @@ process.on("uncaughtException", (error) => {
     console.log("👋 until next time!");
   } else {
     // Rethrow unknown errors
-    throw error;
+    console.error(error);
   }
 });
 
@@ -78,9 +78,15 @@ process.on("uncaughtException", (error) => {
 
     const downloadFileName = downloadUrl.split("/").pop();
 
+    if (!downloadFileName) {
+      throw new ReferenceError(
+        `Could not find download file name for: [${downloadUrl}], could it be a malformed link?`,
+      );
+    }
+
     // Download directly to current working directory
     downloadFile(downloadUrl, {
-      destination: downloadFileName!,
+      destination: downloadFileName,
       onStart: () => downloadSpinner.start(),
       onFinish: () => downloadSpinner.stop(),
     });
