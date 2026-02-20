@@ -26,7 +26,14 @@ export const getSoundNodes = async (searchString: string) => {
 
   while (true) {
     const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page}`;
-    const response = await fetch(url);
+    
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+      },
+    });
 
     if (response.ok) {
       const htmlResult = await response.text();
@@ -39,6 +46,7 @@ export const getSoundNodes = async (searchString: string) => {
       console.error("Failed to fetch sounds:", {
         status: response.status,
         statusText: response.statusText,
+        url: url,
       });
     }
 
@@ -51,12 +59,19 @@ export const getSoundNodes = async (searchString: string) => {
 export const getNodeDownloadPage = async (soundNodeDetailsURL: string) => {
   const root = `https://www.myinstants.com${soundNodeDetailsURL}`;
 
-  const response = await fetch(root);
+  const response = await fetch(root, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.5',
+    },
+  });
 
   if (!response.ok) {
     console.error("Failed to fetch download page:", {
       status: response.status,
       statusText: response.statusText,
+      url: root,
     });
   }
 
