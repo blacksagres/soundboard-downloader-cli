@@ -35,6 +35,11 @@ export const getSoundNodes = async (searchString: string) => {
       page++;
 
       continue;
+    } else {
+      console.error("Failed to fetch sounds:", {
+        status: response.status,
+        statusText: response.statusText,
+      });
     }
 
     break;
@@ -47,6 +52,13 @@ export const getNodeDownloadPage = async (soundNodeDetailsURL: string) => {
   const root = `https://www.myinstants.com${soundNodeDetailsURL}`;
 
   const response = await fetch(root);
+
+  if (!response.ok) {
+    console.error("Failed to fetch download page:", {
+      status: response.status,
+      statusText: response.statusText,
+    });
+  }
 
   return await response.text();
 };
