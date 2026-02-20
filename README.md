@@ -123,6 +123,7 @@ $ npm start
 ? (Use arrow keys)
   > Download
     Play
+    Show download URL (you can pipe this to other commands)
 ```
 
 ## Development
