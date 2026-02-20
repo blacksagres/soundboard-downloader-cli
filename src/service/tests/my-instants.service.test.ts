@@ -7,7 +7,18 @@ describe("my-instants service", () => {
 
   beforeAll(async () => {
     // Use a longer timeout for the initial fetch
+    console.log('🔍 Starting sound search for "wilhelm scream"...');
     results = await getSoundNodes("wilhelm scream");
+    console.log(`✅ Found ${results.length} sounds`);
+    
+    // Log the first few sounds for debugging
+    if (results.length > 0) {
+      console.log('📋 First 3 sounds:');
+      results.slice(0, 3).forEach((sound, index) => {
+        console.log(`  ${index + 1}. ${sound.label}`);
+        console.log(`     URL: ${sound.download_url}`);
+      });
+    }
   }, 15000); // 15 second timeout
 
   test("searching for sounds returns non-empty array", () => {
@@ -34,14 +45,33 @@ describe("my-instants service", () => {
     // Use the first sound instead of random for consistency
     const firstSound = results[0];
     
-    const mp3Result = await fetch(firstSound.download_url, {
-      // Add headers that might help with CI environments
-      headers: {
-        'User-Agent': 'soundboard-downloader-cli-test'
-      }
-    });
+    console.log(`🔍 Testing sound: ${firstSound.label}`);
+    console.log(`🔗 Testing URL: ${firstSound.download_url}`);
+    
+    try {
+      const mp3Result = await fetch(firstSound.download_url, {
+        // Add headers that might help with CI environments
+        headers: {
+          'User-Agent': 'soundboard-downloader-cli-test'
+        }
+      });
 
-    expect(mp3Result.ok).toBe(true);
-    expect(mp3Result.headers.get('content-type')).toContain('audio');
+      console.log(`✅ Fetch successful!`);
+      console.log(`📊 Status: ${mp3Result.status}`);
+      console.log(`🏷️  Headers:`, Object.fromEntries(mp3Result.headers.entries()));
+      console.log(`🔗 Redirect URL: ${mp3Result.url}`);
+
+      expect(mp3Result.ok).toBe(true);
+      expect(mp3Result.headers.get('content-type')).toContain('audio');
+      
+    } catch (error) {
+      console.error('❌ Fetch failed with error:', error);
+      if (error instanceof Error) {
+        console.error('📋 Error name:', error.name);
+        console.error('📝 Error message:', error.message);
+        console.error('🔗 Error cause:', error.cause);
+      }
+      throw error; // Re-throw to fail the test
+    }
   }, 10000); // 10 second timeout for this test
 });
