@@ -8,7 +8,7 @@ import { downloadFile } from "./service/file-downloader.service";
 
 process.on("uncaughtException", (error) => {
   if (error instanceof Error && error.name === "ExitPromptError") {
-    console.log("👋 until next time!");
+    console.log("👋 see ya!");
   } else {
     // Rethrow unknown errors
     console.error(error);
