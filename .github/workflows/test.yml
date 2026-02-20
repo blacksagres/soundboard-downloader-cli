@@ -14,11 +14,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: "npm"
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm test -- --reporter=verbose
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
