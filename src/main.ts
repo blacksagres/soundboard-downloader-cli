@@ -32,6 +32,8 @@ process.on("uncaughtException", (error) => {
 
   spinner.stop();
 
+  console.log(`🎉 Found ${sounds.length} sound${sounds.length !== 1 ? 's' : ''}!`);
+
   const selection = await select({
     message:
       "🎵 Which one to download? (use the keyboard arrows to navigate, search for something directly)",
