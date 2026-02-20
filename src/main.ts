@@ -40,7 +40,7 @@ process.on("uncaughtException", (error) => {
 
     pageSize: 30,
     choices: sounds.map((sound) => ({
-      name: sound.label,
+      name: `${sound.label} 🎵`,
       value: `${sound.label}||${sound.download_url}` as const,
     })),
   });
