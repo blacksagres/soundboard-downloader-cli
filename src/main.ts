@@ -17,7 +17,7 @@ process.on("uncaughtException", (error) => {
 
 (async function () {
   const answer = await input({
-    message: "What sound effects are you looking for?",
+    message: "🔍 What sound effects are you looking for?",
     required: true,
     default: "wilhelm scream",
   });
@@ -34,7 +34,7 @@ process.on("uncaughtException", (error) => {
 
   const selection = await select({
     message:
-      "Which one to download? (use the keyboard arrows to navigate, search for something directly)",
+      "🎵 Which one to download? (use the keyboard arrows to navigate, search for something directly)",
 
     pageSize: 30,
     choices: sounds.map((sound) => ({
@@ -51,15 +51,15 @@ process.on("uncaughtException", (error) => {
 
   const actions = [
     {
-      name: "Download",
+      name: "💾 Download",
       value: "action:download",
     },
     {
-      name: "Play",
+      name: "▶️ Play",
       value: "action:play",
     },
     {
-      name: "Show download URL (you can pipe this to other commands)",
+      name: "🔗 Show download URL (you can pipe this to other commands)",
       value: "action:show-url",
     },
   ] as const;
