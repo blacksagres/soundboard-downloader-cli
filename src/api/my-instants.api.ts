@@ -8,6 +8,9 @@
  * 5. Download the sound (donwload folder from the user)
  */
 
+// Add a small delay to make requests look more human
+const humanLikeDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const getSoundNodes = async (searchString: string) => {
   let page = 1;
   const result: Array<string> = [];
@@ -49,6 +52,9 @@ export const getSoundNodes = async (searchString: string) => {
       result.push(htmlResult);
 
       page++;
+
+      // Add human-like delay between requests
+      await humanLikeDelay(500 + Math.random() * 1000);
 
       continue;
     } else {
