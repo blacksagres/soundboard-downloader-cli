@@ -2,7 +2,7 @@
 
 A Node.js command-line tool to download soundboard sounds from [MyInstants](https://myinstants.com).
 
-**📦️ npm package**: `@purpleproser/soundboard-downloader-cli`
+**📦️ npm package**: [`@purpleproser/soundboard-downloader-cli`](https://www.npmjs.com/package/@purpleproser/soundboard-downloader-cli)
 
 **GitHub Repository**: [blacksagres/soundboard-downloader-cli](https://github.com/blacksagres/soundboard-downloader-cli)
 
