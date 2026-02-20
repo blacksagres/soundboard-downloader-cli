@@ -1,9 +1,9 @@
-name: ➡️ Release please
+name: ➡️ Release please (DISABLED)
 
 on:
   push:
     branches:
-      - main
+      - disabled-temporarily
 
 permissions:
   contents: write
