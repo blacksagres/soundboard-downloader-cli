@@ -34,6 +34,10 @@ describe("my-instants service", () => {
     // Use the first sound instead of random for consistency
     const firstSound = results[0];
     
+    if (!firstSound) {
+      throw new Error("No first sound found for testing");
+    }
+    
     const mp3Result = await fetch(firstSound.download_url, {
       // Add headers that might help with CI environments
       headers: {

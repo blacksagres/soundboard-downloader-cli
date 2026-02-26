@@ -21,7 +21,6 @@ export const downloadFile = (
     file.on("finish", () => {
       file.close();
       config.onFinish?.();
-      console.log("Download Completed");
     });
   });
 };
