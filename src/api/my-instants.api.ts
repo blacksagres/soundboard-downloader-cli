@@ -1,52 +1,89 @@
 /**
- * Fetch the html from myinstants.com.
+ * Fetch the html from myinstants.com with server-side pagination support.
  *
- * 1. Query the html for the sound based on name
- * 2 .Then find the corresponding link to that sound
- * 3. Transform the found html nodes to an object with `{ label: string, download_url: string }`
- * 4. List them in the console - a user can pick one of the list (search in terminal)
- * 5. Download the sound (donwload folder from the user)
+ * This module provides functions to fetch sound nodes page by page,
+ * enabling efficient browsing of search results without loading everything at once.
  */
 
-export const getSoundNodes = async (searchString: string) => {
-  let page = 1;
-  const result: Array<string> = [];
+import { Query } from "../common/types/query.type";
 
+/**
+ * Fetch a single page of sound nodes from myinstants.com
+ * @param searchString The search term
+ * @param page The page number to fetch (default: 1)
+ * @returns HTML content of the requested page
+ * @throws Error if the page cannot be fetched
+ */
+export const getSoundNodesPage = async ({ searchString, page = 1 }: Query): Promise<string> => {
   const escapedSearchParam = encodeURIComponent(searchString);
+  const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page}`;
+  const response = await fetch(url);
 
-  /**
-   * Yeah so that page does a little trick to make an infinite scroll.
-   *
-   * Whenever you hit the page in your browser, there's a script that will try to fetch the next page and
-   * append the results to the current one, until it hits a 404 (ran out of pages). Here we try to do the same.
-   *
-   * One idea was to append this all into one string document but we just return 1 array with all
-   * the pages we found. Then he service layer can crunch on this to determine what to pick.
-   */
+  if (!response.ok) {
+    throw new Error(`Failed to fetch page ${page} for search: ${searchString}`);
+  }
+
+  return response.text();
+};
+
+/**
+ * Check if next page exists using HEAD request for efficiency
+ * @param searchString The search term
+ * @param page The current page number (default: 1)
+ * @returns true if next page exists, false otherwise
+ */
+export const hasNextPage = async ({ searchString, page = 1 }: Query): Promise<boolean> => {
+  const escapedSearchParam = encodeURIComponent(searchString);
+  const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page + 1}`;
+
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+};
+
+/**
+ * Fetch all pages (for --all flag)
+ * This maintains the original functionality but as an explicit option
+ * @param searchString The search term
+ * @returns Array of HTML content for all pages
+ */
+export const getAllSoundNodes = async ({ searchString }: Query): Promise<string[]> => {
+  const result: string[] = [];
+  let page = 1;
 
   while (true) {
-    const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page}`;
-    const response = await fetch(url);
-
-    if (response.ok) {
-      const htmlResult = await response.text();
-      result.push(htmlResult);
-
+    try {
+      const html = await getSoundNodesPage({ searchString, page });
+      result.push(html);
       page++;
 
-      continue;
+      // Check if next page exists
+      const nextExists = await hasNextPage({ searchString, page });
+      if (!nextExists) break;
+    } catch (error) {
+      // If we get an error fetching a page, assume we've reached the end
+      break;
     }
-
-    break;
   }
 
   return result;
 };
 
-export const getNodeDownloadPage = async (soundNodeDetailsURL: string) => {
+/**
+ * Fetch the download page for a specific sound node
+ * @param soundNodeDetailsURL The relative URL of the sound detail page
+ * @returns HTML content of the sound detail page
+ */
+export const getNodeDownloadPage = async (soundNodeDetailsURL: string): Promise<string> => {
   const root = `https://www.myinstants.com${soundNodeDetailsURL}`;
-
   const response = await fetch(root);
 
-  return await response.text();
+  if (!response.ok) {
+    throw new Error(`Failed to fetch sound detail page: ${soundNodeDetailsURL}`);
+  }
+
+  return response.text();
 };
