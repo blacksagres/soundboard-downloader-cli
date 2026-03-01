@@ -63,7 +63,7 @@ process.on("uncaughtException", (error) => {
         );
 
         // Prepare sound choices
-        const soundChoices = results.map((sound) => ({
+        const soundChoices = results.map((sound: { label: string; download_url: string }) => ({
           name: `${sound.label} 🎵`,
           value: `${sound.label}||${sound.download_url}` as const,
         }));

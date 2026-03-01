@@ -4,6 +4,11 @@ import {
   hasNextPage as hasNextPageApi,
   getAllSoundNodes as getAllSoundNodesApi,
 } from "../api/my-instants.api";
+import {
+  validatePaginatedResults,
+  validateSoundsArray,
+  ValidatedPaginatedResults
+} from "../api/validation-schemas";
 import * as jsdom from "jsdom";
 import { Query, SoundSelection } from "../common/types/query.type";
 
@@ -118,12 +123,7 @@ export const getSoundNodesPage = async (params: Query): Promise<Array<{ label: s
 export const getPaginatedResults = async (
   searchString: string,
   page: number = 1
-): Promise<{
-  results: Array<{ label: string; download_url: string }>;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  currentPage: number;
-}> => {
+): Promise<ValidatedPaginatedResults> => {
   // Clear cache for new searches
   if (page === 1) {
     clearCache(searchString);
@@ -132,12 +132,15 @@ export const getPaginatedResults = async (
   const currentResults = await getSoundNodesPage({ searchString, page });
   const hasNext = await hasNextPageApi({ searchString, page });
 
-  return {
+  // Validate the results before returning
+  const validatedResults = validatePaginatedResults({
     results: currentResults,
     hasNextPage: hasNext,
     hasPreviousPage: page > 1,
     currentPage: page
-  };
+  });
+
+  return validatedResults;
 };
 
 /**
@@ -172,8 +175,11 @@ export const getAllResults = async (searchString: string): Promise<Array<{ label
 
   const downloadUrls = await Promise.all(downloadPromises);
 
-  return soundDetails.map((detail, index) => ({
+  const finalResults = soundDetails.map((detail, index) => ({
     label: detail.label,
     download_url: downloadUrls[index] || "not-found"
   })).sort((a, b) => a.label.localeCompare(b.label));
+
+  // Validate all results before returning
+  return validateSoundsArray(finalResults);
 };
