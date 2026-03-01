@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
-import { getPaginatedResults, getAllResults } from "./service/my-instants.service";
+import {
+  getPaginatedResults,
+  getAllResults,
+} from "./service/my-instants.service";
 import ora from "ora";
 import { input, select, checkbox } from "@inquirer/prompts";
 import open from "open";
@@ -16,7 +19,7 @@ import {
   createPaginationChoices,
   getNavigationAction,
   getSoundSelections,
-  getPaginationInfo
+  getPaginationInfo,
 } from "./utils/pagination-utils";
 
 process.on("uncaughtException", (error) => {
@@ -31,7 +34,7 @@ process.on("uncaughtException", (error) => {
 (async function () {
   // Check for --all flag
   const args = process.argv.slice(2);
-  const shouldFetchAll = args.includes('--all');
+  const shouldFetchAll = args.includes("--all");
 
   let answer = await input({
     message: "🔍 What sound effects are you looking for?",
@@ -52,11 +55,12 @@ process.on("uncaughtException", (error) => {
       }).start();
 
       try {
-        const { results, hasNextPage, hasPreviousPage } = await getPaginatedResults(answer, currentPage);
+        const { results, hasNextPage, hasPreviousPage } =
+          await getPaginatedResults(answer, currentPage);
         spinner.stop();
 
         console.log(
-          getPaginationInfo(currentPage, results.length, hasNextPage)
+          getPaginationInfo(currentPage, results.length, hasNextPage),
         );
 
         // Prepare sound choices
@@ -70,30 +74,31 @@ process.on("uncaughtException", (error) => {
           currentPage,
           hasNextPage,
           hasPreviousPage,
-          true // include all option
+          true, // include all option
         );
 
         const allChoices = [...soundChoices, ...paginationChoices];
 
         const rawSelections = await checkbox({
-          message: "🎵 Select sounds or navigate (space to select, arrows to navigate, search to filter):",
+          message:
+            "🎵 Select sounds or navigate (space to select, arrows to navigate, search to filter):",
           choices: allChoices,
         });
 
         // Handle navigation actions
         const navigationAction = getNavigationAction(rawSelections);
-        
+
         if (navigationAction) {
           switch (navigationAction) {
-            case 'action:prev-page':
+            case "action:prev-page":
               if (hasPreviousPage) currentPage--;
               continue;
-            
-            case 'action:next-page':
+
+            case "action:next-page":
               if (hasNextPage) currentPage++;
               continue;
-            
-            case 'action:new-search':
+
+            case "action:new-search":
               // Reset for new search
               answer = await input({
                 message: "🔍 What sound effects are you looking for?",
@@ -102,8 +107,8 @@ process.on("uncaughtException", (error) => {
               });
               currentPage = 1;
               continue;
-            
-            case 'action:show-all':
+
+            case "action:show-all":
               // Switch to fetch-all mode
               shouldContinuePagination = false;
               break;
@@ -113,7 +118,7 @@ process.on("uncaughtException", (error) => {
 
         // If we get here, user selected actual sounds
         shouldContinuePagination = false;
-        
+
         // Process the sound selections
         const soundSelections = getSoundSelections(rawSelections);
         const selections = parseSelections(soundSelections);
@@ -223,16 +228,19 @@ process.on("uncaughtException", (error) => {
         }
       } catch (error) {
         spinner.stop();
-        console.error("❌ Error loading results:", error instanceof Error ? error.message : String(error));
-        
+        console.error(
+          "❌ Error loading results:",
+          error instanceof Error ? error.message : String(error),
+        );
+
         const retry = await select({
           message: "What would you like to do?",
           choices: [
             { name: "🔍 Try a new search", value: "new-search" },
-            { name: "🚪 Exit", value: "exit" }
-          ]
+            { name: "🚪 Exit", value: "exit" },
+          ],
         });
-        
+
         if (retry === "new-search") {
           answer = await input({
             message: "🔍 What sound effects are you looking for?",
@@ -247,7 +255,7 @@ process.on("uncaughtException", (error) => {
       }
     }
   }
-  
+
   // Fetch-all mode
   if (shouldFetchAll) {
     const spinner = ora({
@@ -381,7 +389,10 @@ process.on("uncaughtException", (error) => {
       }
     } catch (error) {
       spinner.stop();
-      console.error("❌ Error loading all results:", error instanceof Error ? error.message : String(error));
+      console.error(
+        "❌ Error loading all results:",
+        error instanceof Error ? error.message : String(error),
+      );
     }
   }
 })();
