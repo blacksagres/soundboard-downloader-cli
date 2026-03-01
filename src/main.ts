@@ -33,7 +33,7 @@ process.on("uncaughtException", (error) => {
 (async function () {
   // Check for --all flag
   const args = process.argv.slice(2);
-  const shouldFetchAll = args.includes("--all");
+  let shouldFetchAll = args.includes("--all");
 
   let answer = await input({
     message: "🔍 What sound effects are you looking for?",
@@ -122,6 +122,7 @@ process.on("uncaughtException", (error) => {
 
             case "action:show-all":
               // Switch to fetch-all mode
+              shouldFetchAll = true;
               shouldContinuePagination = false;
               break;
           }
@@ -133,44 +134,36 @@ process.on("uncaughtException", (error) => {
 
         // Process the single sound selection
         const selections = parseSelections([selection as string]);
-        const multipleSelected = false; // Always single selection in pagination mode
 
-        // Determine available actions based on selection count
-        let actions = [
+        // Available actions for single sound selection
+        const actions = [
           {
             name: "💾 Download",
             value: "action:download",
           },
+          {
+            name: "▶️ Play",
+            value: "action:play",
+          },
+          {
+            name: "🔗 Show download URL (you can pipe this to other commands)",
+            value: "action:show-url",
+          },
         ] as Array<{ name: string; value: string }>;
-
-        // For single selection, add additional options
-        if (!multipleSelected) {
-          actions = [
-            ...actions,
-            {
-              name: "▶️ Play",
-              value: "action:play",
-            },
-            {
-              name: "🔗 Show download URL (you can pipe this to other commands)",
-              value: "action:show-url",
-            },
-          ];
-        }
 
         const action: string = await select({
           message: getSelectionMessage(selections),
           choices: actions,
         });
 
-        if (action === "action:show-url" && !multipleSelected) {
+        if (action === "action:show-url") {
           const firstSelection = getFirstSelection(selections);
           if (firstSelection) {
             console.log(firstSelection.downloadUrl);
           }
         }
 
-        if (action === "action:play" && !multipleSelected) {
+        if (action === "action:play") {
           const firstSelection = getFirstSelection(selections);
           if (firstSelection) {
             open(firstSelection.downloadUrl);
