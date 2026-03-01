@@ -3,9 +3,13 @@
  *
  * This module provides functions to fetch sound nodes page by page,
  * enabling efficient browsing of search results without loading everything at once.
+ *
+ * Can be switched to mock mode for testing via api-config.ts
  */
 
 import { Query } from "../common/types/query.type";
+import { getApiMode, isMockMode } from "./api-config";
+import * as MockApi from "./my-instants.api.mock";
 
 /**
  * Fetch a single page of sound nodes from myinstants.com
@@ -15,6 +19,11 @@ import { Query } from "../common/types/query.type";
  * @throws Error if the page cannot be fetched
  */
 export const getSoundNodesPage = async ({ searchString, page = 1 }: Query): Promise<string> => {
+  // Use mock data if in mock mode
+  if (isMockMode()) {
+    return MockApi.getSoundNodesPage({ searchString, page });
+  }
+
   const escapedSearchParam = encodeURIComponent(searchString);
   const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page}`;
   const response = await fetch(url);
@@ -33,6 +42,11 @@ export const getSoundNodesPage = async ({ searchString, page = 1 }: Query): Prom
  * @returns true if next page exists, false otherwise
  */
 export const hasNextPage = async ({ searchString, page = 1 }: Query): Promise<boolean> => {
+  // Use mock data if in mock mode
+  if (isMockMode()) {
+    return MockApi.hasNextPage({ searchString, page });
+  }
+
   const escapedSearchParam = encodeURIComponent(searchString);
   const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page + 1}`;
 
@@ -51,6 +65,11 @@ export const hasNextPage = async ({ searchString, page = 1 }: Query): Promise<bo
  * @returns Array of HTML content for all pages
  */
 export const getAllSoundNodes = async ({ searchString }: Query): Promise<string[]> => {
+  // Use mock data if in mock mode
+  if (isMockMode()) {
+    return MockApi.getAllSoundNodes({ searchString });
+  }
+
   const result: string[] = [];
   let page = 1;
 
@@ -78,6 +97,11 @@ export const getAllSoundNodes = async ({ searchString }: Query): Promise<string[
  * @returns HTML content of the sound detail page
  */
 export const getNodeDownloadPage = async (soundNodeDetailsURL: string): Promise<string> => {
+  // Use mock data if in mock mode
+  if (isMockMode()) {
+    return MockApi.getNodeDownloadPage(soundNodeDetailsURL);
+  }
+
   const root = `https://www.myinstants.com${soundNodeDetailsURL}`;
   const response = await fetch(root);
 
