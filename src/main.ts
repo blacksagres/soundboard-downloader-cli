@@ -6,6 +6,7 @@ import {
 } from "./service/my-instants.service";
 import ora from "ora";
 import { input, select, checkbox } from "@inquirer/prompts";
+import * as inquirer from "@inquirer/prompts";
 import open from "open";
 import { downloadFile } from "./service/file-downloader.service";
 import {
@@ -16,9 +17,7 @@ import {
   getFirstSelection,
 } from "./utils/selection-utils";
 import {
-  createPaginationChoices,
-  getNavigationAction,
-  getSoundSelections,
+  isNavigationAction,
   getPaginationInfo,
 } from "./utils/pagination-utils";
 
@@ -69,27 +68,40 @@ process.on("uncaughtException", (error) => {
           value: `${sound.label}||${sound.download_url}` as const,
         }));
 
-        // Add pagination choices
-        const paginationChoices = createPaginationChoices(
-          currentPage,
-          hasNextPage,
-          hasPreviousPage,
-          true, // include all option
-        );
+        // Add navigation choices as separate actions
+        const navigationChoices = [
+          new inquirer.Separator("=== Navigation ==="),
+          {
+            name: hasPreviousPage ? "⏮️ Previous page" : "⏮️ Previous page (disabled)",
+            value: "action:prev-page",
+            disabled: !hasPreviousPage
+          },
+          {
+            name: hasNextPage ? "⏭️ Next page" : "⏭️ Next page (disabled)",
+            value: "action:next-page",
+            disabled: !hasNextPage
+          },
+          {
+            name: "🔍 New search",
+            value: "action:new-search"
+          },
+          {
+            name: "📋 Show all results",
+            value: "action:show-all"
+          }
+        ];
 
-        const allChoices = [...soundChoices, ...paginationChoices];
+        const allChoices = [...soundChoices, ...navigationChoices];
 
-        const rawSelections = await checkbox({
-          message:
-            "🎵 Select sounds or navigate (space to select, arrows to navigate, search to filter):",
+        // Use radio selection instead of checkbox for single selection
+        const selection = await select({
+          message: "🎵 Select a sound or choose a navigation option:",
           choices: allChoices,
         });
 
         // Handle navigation actions
-        const navigationAction = getNavigationAction(rawSelections);
-
-        if (navigationAction) {
-          switch (navigationAction) {
+        if (isNavigationAction(selection)) {
+          switch (selection) {
             case "action:prev-page":
               if (hasPreviousPage) currentPage--;
               continue;
@@ -116,13 +128,12 @@ process.on("uncaughtException", (error) => {
           continue;
         }
 
-        // If we get here, user selected actual sounds
+        // If we get here, user selected a sound
         shouldContinuePagination = false;
 
-        // Process the sound selections
-        const soundSelections = getSoundSelections(rawSelections);
-        const selections = parseSelections(soundSelections);
-        const multipleSelected = isMultipleSelection(selections);
+        // Process the single sound selection
+        const selections = parseSelections([selection as string]);
+        const multipleSelected = false; // Always single selection in pagination mode
 
         // Determine available actions based on selection count
         let actions = [
