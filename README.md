@@ -162,20 +162,39 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## Compliance with MyInstants Terms of Use
 
-This tool is designed to comply with [MyInstants Terms of Use](https://www.myinstants.com/en/terms_of_use.html):
+This tool is designed to comply with [MyInstants Terms of Use](https://www.myinstants.com/en/terms_of_use.html).
 
-✅ **Personal Use Only**: This tool is for personal, non-commercial use only
-✅ **Official Functionality**: Uses MyInstants' official download buttons and links
-✅ **No Circumvention**: Does not bypass any access controls or copyright protections
-✅ **Rate Limiting**: Includes reasonable delays between requests to avoid server overload
+### Compliance Features
 
-⚠️ **User Responsibilities**:
-- Do not use this tool for commercial purposes
-- Do not make excessive automated requests
-- Respect MyInstants' copyright and terms of service
-- MyInstants may revoke access at any time
+✅ **Personal Use Only**
+This tool is for personal, non-commercial use only. Commercial use violates MyInstants' terms.
 
-**Important**: MyInstants grants access under a revocable license. This tool may stop working if MyInstants changes their website or terms.
+✅ **Official Functionality**
+Uses MyInstants' official download buttons and links, exactly as a manual user would.
+
+✅ **No Circumvention**
+Does not bypass any access controls, paywalls, or copyright protections.
+
+✅ **Rate Limiting**
+Includes 1-second delays between API requests to avoid being flagged as automated scraping.
+
+### User Responsibilities
+
+When using this tool, you agree to:
+
+- **Non-commercial use only** - No business or commercial applications
+- **Respect rate limits** - Do not make excessive automated requests
+- **Honor copyright** - Respect MyInstants' terms and copyright protections
+- **Accept revocable access** - MyInstants may change their terms or block access at any time
+
+### Important Notice
+
+MyInstants grants access to their website under a revocable license. While this tool is designed to comply with their current terms, it may stop working if:
+- MyInstants changes their website structure
+- MyInstants updates their terms of service
+- MyInstants decides to block automated tools
+
+Always check the [current MyInstants Terms of Use](https://www.myinstants.com/en/terms_of_use.html) for the latest requirements.
 
 ## Legal Disclaimer
 
