@@ -1,7 +1,7 @@
 {
   "name": "@purpleproser/soundboard-downloader-cli",
   "version": "1.6.3",
-  "description": "Easily download sounds from myinstants.com using this interactive CLI tool",
+  "description": "Easily download sounds from myinstants.com using this interactive CLI tool (for personal, non-commercial use only)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

@@ -10,6 +10,7 @@
 import { Query } from "../common/types/query.type";
 import { getApiMode, isMockMode } from "./api-config";
 import * as MockApi from "./my-instants.api.mock";
+import { rateLimitedFetch } from "../utils/rate-limiter";
 
 /**
  * Fetch a single page of sound nodes from myinstants.com
@@ -26,7 +27,7 @@ export const getSoundNodesPage = async ({ searchString, page = 1 }: Query): Prom
 
   const escapedSearchParam = encodeURIComponent(searchString);
   const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page}`;
-  const response = await fetch(url);
+  const response = await rateLimitedFetch(url);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch page ${page} for search: ${searchString}`);
@@ -51,7 +52,7 @@ export const hasNextPage = async ({ searchString, page = 1 }: Query): Promise<bo
   const url = `https://www.myinstants.com/en/search/?name=${escapedSearchParam}&page=${page + 1}`;
 
   try {
-    const response = await fetch(url, { method: 'HEAD' });
+    const response = await rateLimitedFetch(url, { method: 'HEAD' });
     return response.ok;
   } catch (error) {
     return false;
@@ -103,7 +104,7 @@ export const getNodeDownloadPage = async (soundNodeDetailsURL: string): Promise<
   }
 
   const root = `https://www.myinstants.com${soundNodeDetailsURL}`;
-  const response = await fetch(root);
+  const response = await rateLimitedFetch(root);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch sound detail page: ${soundNodeDetailsURL}`);

@@ -160,6 +160,23 @@ soundboard-downloader
 
 Contributions are welcome! Please open an issue or submit a pull request.
 
+## Compliance with MyInstants Terms of Use
+
+This tool is designed to comply with [MyInstants Terms of Use](https://www.myinstants.com/en/terms_of_use.html):
+
+✅ **Personal Use Only**: This tool is for personal, non-commercial use only
+✅ **Official Functionality**: Uses MyInstants' official download buttons and links
+✅ **No Circumvention**: Does not bypass any access controls or copyright protections
+✅ **Rate Limiting**: Includes reasonable delays between requests to avoid server overload
+
+⚠️ **User Responsibilities**:
+- Do not use this tool for commercial purposes
+- Do not make excessive automated requests
+- Respect MyInstants' copyright and terms of service
+- MyInstants may revoke access at any time
+
+**Important**: MyInstants grants access under a revocable license. This tool may stop working if MyInstants changes their website or terms.
+
 ## Legal Disclaimer
 
 **Important Notice About Copyright and Usage:**
