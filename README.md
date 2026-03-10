@@ -1,6 +1,6 @@
 # @purpleproser/soundboard-downloader-cli
 
-[![Socket Badge](https://badge.socket.dev/npm/package/@purpleproser/soundboard-downloader-cli/1.6.0)](https://badge.socket.dev/npm/package/@purpleproser/soundboard-downloader-cli/1.6.0)
+[![Socket Badge](https://badge.socket.dev/npm/package/@purpleproser/soundboard-downloader-cli/1.6.2)](https://badge.socket.dev/npm/package/@purpleproser/soundboard-downloader-cli/1.6.2)
 
 A Node.js command-line tool to download soundboard sounds from [MyInstants](https://myinstants.com).
 
