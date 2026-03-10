@@ -1,5 +1,8 @@
 # @purpleproser/soundboard-downloader-cli
 
+[![npm version](https://img.shields.io/npm/v/@purpleproser/soundboard-downloader-cli?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/@purpleproser/soundboard-downloader-cli)
+[![npm downloads](https://img.shields.io/npm/dm/@purpleproser/soundboard-downloader-cli?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/@purpleproser/soundboard-downloader-cli)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 [![Socket Badge](https://badge.socket.dev/npm/package/@purpleproser/soundboard-downloader-cli/1.6.2)](https://badge.socket.dev/npm/package/@purpleproser/soundboard-downloader-cli/1.6.2)
 
 A Node.js command-line tool to download soundboard sounds from [MyInstants](https://myinstants.com).
@@ -15,10 +18,10 @@ A Node.js command-line tool to download soundboard sounds from [MyInstants](http
 
 ## Tech Stack
 
-- **Inquirer** - Interactive CLI prompts
+- **prompts** - Lightweight interactive CLI prompts
 - **jsdom** - HTML parsing and DOM manipulation
 - **ora** - Elegant terminal spinners
-- **open** - Opens URLs in the user's browser to allow previewing the sound
+- **opener** - Opens URLs in the user's browser to allow previewing the sound
 
 ## Prerequisites
 
