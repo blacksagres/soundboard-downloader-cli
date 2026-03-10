@@ -5,7 +5,8 @@ import {
   getAllResults,
 } from "./service/my-instants.service";
 import ora from "ora";
-import prompts from "prompts";
+import { input, select, checkbox } from "@inquirer/prompts";
+import * as inquirer from "@inquirer/prompts";
 import open from "open";
 import { downloadFile } from "./service/file-downloader.service";
 import {
@@ -34,13 +35,11 @@ process.on("uncaughtException", (error) => {
   const args = process.argv.slice(2);
   let shouldFetchAll = args.includes("--all");
 
-  let answer = (await prompts({
-    type: 'text',
-    name: 'searchQuery',
+  let answer = await input({
     message: "🔍 What sound effects are you looking for?",
-    validate: (value: string) => value.trim() !== '' ? true : 'Please enter a search term',
-    initial: "wilhelm scream",
-  })).searchQuery;
+    required: true,
+    default: "wilhelm scream",
+  });
 
   // Pagination flow
   if (!shouldFetchAll) {
@@ -65,43 +64,40 @@ process.on("uncaughtException", (error) => {
 
         // Prepare sound choices
         const soundChoices = results.map((sound: { label: string; download_url: string }) => ({
-          title: `${sound.label} 🎵`,
+          name: `${sound.label} 🎵`,
           value: `${sound.label}||${sound.download_url}` as const,
         }));
 
         // Add navigation choices as separate actions
         const navigationChoices = [
+          new inquirer.Separator("=== Navigation ==="),
           {
-            title: hasPreviousPage ? "⏮️ Previous page" : "⏮️ Previous page (disabled)",
+            name: hasPreviousPage ? "⏮️ Previous page" : "⏮️ Previous page (disabled)",
             value: "action:prev-page",
             disabled: !hasPreviousPage
           },
           {
-            title: hasNextPage ? "⏭️ Next page" : "⏭️ Next page (disabled)",
+            name: hasNextPage ? "⏭️ Next page" : "⏭️ Next page (disabled)",
             value: "action:next-page",
             disabled: !hasNextPage
           },
           {
-            title: "🔍 New search",
+            name: "🔍 New search",
             value: "action:new-search"
           },
           {
-            title: "📋 Show all results",
+            name: "📋 Show all results",
             value: "action:show-all"
           }
         ];
 
         const allChoices = [...soundChoices, ...navigationChoices];
 
-        // Use select (radio) for single selection
-        const selectionResponse = await prompts({
-          type: 'select',
-          name: 'selection',
+        // Use radio selection instead of checkbox for single selection
+        const selection = await select({
           message: "🎵 Select a sound or choose a navigation option:",
           choices: allChoices,
         });
-
-        const selection = selectionResponse.selection;
 
         // Handle navigation actions
         if (isNavigationAction(selection)) {
@@ -116,13 +112,11 @@ process.on("uncaughtException", (error) => {
 
             case "action:new-search":
               // Reset for new search
-              answer = (await prompts({
-                type: 'text',
-                name: 'searchQuery',
+              answer = await input({
                 message: "🔍 What sound effects are you looking for?",
-                validate: (value: string) => value.trim() !== '' ? true : 'Please enter a search term',
-                initial: answer,
-              })).searchQuery;
+                required: true,
+                default: answer,
+              });
               currentPage = 1;
               continue;
 
@@ -144,27 +138,23 @@ process.on("uncaughtException", (error) => {
         // Available actions for single sound selection
         const actions = [
           {
-            title: "💾 Download",
+            name: "💾 Download",
             value: "action:download",
           },
           {
-            title: "▶️ Play",
+            name: "▶️ Play",
             value: "action:play",
           },
           {
-            title: "🔗 Show download URL (you can pipe this to other commands)",
+            name: "🔗 Show download URL (you can pipe this to other commands)",
             value: "action:show-url",
           },
-        ];
+        ] as Array<{ name: string; value: string }>;
 
-        const actionResponse = await prompts({
-          type: 'select',
-          name: 'action',
+        const action: string = await select({
           message: getSelectionMessage(selections),
           choices: actions,
         });
-
-        const action: string = actionResponse.action;
 
         if (action === "action:show-url") {
           const firstSelection = getFirstSelection(selections);
@@ -247,24 +237,20 @@ process.on("uncaughtException", (error) => {
           error instanceof Error ? error.message : String(error),
         );
 
-        const retryResponse = await prompts({
-          type: 'select',
-          name: 'retry',
+        const retry = await select({
           message: "What would you like to do?",
           choices: [
-            { title: "🔍 Try a new search", value: "new-search" },
-            { title: "🚪 Exit", value: "exit" },
+            { name: "🔍 Try a new search", value: "new-search" },
+            { name: "🚪 Exit", value: "exit" },
           ],
         });
 
-        if (retryResponse.retry === "new-search") {
-          answer = (await prompts({
-            type: 'text',
-            name: 'searchQuery',
+        if (retry === "new-search") {
+          answer = await input({
             message: "🔍 What sound effects are you looking for?",
-            validate: (value: string) => value.trim() !== '' ? true : 'Please enter a search term',
-            initial: answer,
-          })).searchQuery;
+            required: true,
+            default: answer,
+          });
           currentPage = 1;
           continue;
         } else {
@@ -290,18 +276,14 @@ process.on("uncaughtException", (error) => {
         `🎉 Found ${allResults.length} sound${allResults.length !== 1 ? "s" : ""}!`,
       );
 
-      const rawSelectionsResponse = await prompts({
-        type: 'multiselect',
-        name: 'selections',
+      const rawSelections = await checkbox({
         message:
           "🎵 Which sounds to download? (use space to select multiple, arrows to navigate, search for something directly)",
         choices: allResults.map((sound) => ({
-          title: `${sound.label} 🎵`,
+          name: `${sound.label} 🎵`,
           value: `${sound.label}||${sound.download_url}` as const,
         })),
       });
-
-      const rawSelections = rawSelectionsResponse.selections || [];
 
       // Parse and validate selections
       const selections = parseSelections(rawSelections);
@@ -310,34 +292,30 @@ process.on("uncaughtException", (error) => {
       // Determine available actions based on selection count
       let actions = [
         {
-          title: "💾 Download",
+          name: "💾 Download",
           value: "action:download",
         },
-      ];
+      ] as Array<{ name: string; value: string }>;
 
       // For single selection, add additional options
       if (!multipleSelected) {
         actions = [
           ...actions,
           {
-            title: "▶️ Play",
+            name: "▶️ Play",
             value: "action:play",
           },
           {
-            title: "🔗 Show download URL (you can pipe this to other commands)",
+            name: "🔗 Show download URL (you can pipe this to other commands)",
             value: "action:show-url",
           },
         ];
       }
 
-      const actionResponse = await prompts({
-        type: 'select',
-        name: 'action',
+      const action: string = await select({
         message: getSelectionMessage(selections),
         choices: actions,
       });
-
-      const action: string = actionResponse.action;
 
       if (action === "action:show-url" && !multipleSelected) {
         const firstSelection = getFirstSelection(selections);
