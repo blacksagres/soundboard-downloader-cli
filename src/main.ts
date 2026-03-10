@@ -6,7 +6,7 @@ import {
 } from "./service/my-instants.service";
 import ora from "ora";
 import prompts from "prompts";
-import open from "open";
+import opener from "opener";
 import { downloadFile } from "./service/file-downloader.service";
 import {
   parseSelections,
@@ -176,7 +176,7 @@ process.on("uncaughtException", (error) => {
         if (action === "action:play") {
           const firstSelection = getFirstSelection(selections);
           if (firstSelection) {
-            open(firstSelection.downloadUrl);
+            opener(firstSelection.downloadUrl);
           }
         }
 
@@ -349,7 +349,7 @@ process.on("uncaughtException", (error) => {
       if (action === "action:play" && !multipleSelected) {
         const firstSelection = getFirstSelection(selections);
         if (firstSelection) {
-          open(firstSelection.downloadUrl);
+          opener(firstSelection.downloadUrl);
         }
       }
 
